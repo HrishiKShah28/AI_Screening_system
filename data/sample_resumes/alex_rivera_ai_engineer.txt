@@ -1,0 +1,27 @@
+Alex Rivera
+Email: alex.rivera@example.com | GitHub: github.com/arivera-ml | LinkedIn: linkedin.com/in/alexrivera-ml
+Location: San Francisco, CA
+
+PROFESSIONAL SUMMARY
+Machine Learning Engineer with 2+ years of experience specializing in deep learning, training pipeline optimization, and neural architectures in PyTorch. Passionate about loss landscape optimization, gradient convergence dynamics, and scalable model evaluation.
+
+CORE SKILLS & TECHNOLOGIES
+- Languages: Python, C++, SQL, Bash
+- Frameworks & Libraries: PyTorch, TensorFlow, Scikit-Learn, NumPy, Pandas, HuggingFace
+- Tools & Infrastructure: Docker, Git, Linux, CUDA, MLflow, Weights & Biases
+- ML Competencies: Supervised Learning, Stochastic Gradient Descent, Loss Optimization, Overfitting & Regularization (L1/L2), Convolutional Networks, Model Profiling
+
+PROFESSIONAL EXPERIENCE
+Machine Learning Engineer | Apex AI Labs (2024 - Present)
+- Designed and benchmarked custom mini-batch training loops in PyTorch, reducing per-epoch iteration time by 28% across multi-GPU setups.
+- Implemented adaptive learning rate schedulers and gradient clipping to stabilize training for high-variance loss surfaces.
+- Integrated automated evaluation metrics (ROC-AUC, Precision-Recall, F1) into continuous deployment pipelines.
+
+Junior ML Developer | Synapse Data (2023 - 2024)
+- Developed decision tree and gradient boosted ensembles (XGBoost, Random Forest) for tabular classification benchmarks.
+- Mitigated model overfitting using L2 weight decay and dropout, improving out-of-sample generalization accuracy by 6.2%.
+- Cleaned and prepared high-dimensional feature datasets, utilizing PCA for dimensionality reduction.
+
+EDUCATION
+B.S. in Computer Science (Specialization in Artificial Intelligence) | University of California, Berkeley (2019 - 2023)
+
