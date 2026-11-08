@@ -1,5 +1,13 @@
 """FastAPI application entrypoint and middleware configuration."""
 
+import sys
+from pathlib import Path
+
+# Add 'backend' directory to sys.path so 'app.*' imports resolve cleanly from anywhere
+backend_dir = Path(__file__).resolve().parent.parent
+if str(backend_dir) not in sys.path:
+    sys.path.insert(0, str(backend_dir))
+
 from datetime import datetime
 from fastapi import FastAPI, Request, status
 from fastapi.middleware.cors import CORSMiddleware
