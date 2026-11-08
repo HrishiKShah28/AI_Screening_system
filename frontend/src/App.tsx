@@ -131,7 +131,7 @@ export function App() {
 
       <main className="flex-1">
         {error && (
-          <div className="max-w-4xl mx-auto px-4 mt-6">
+          <div className="max-w-[1500px] w-full mx-auto px-4 sm:px-6 lg:px-10 mt-6">
             <div className="p-4 rounded-2xl bg-rose-500/10 border border-rose-500/30 text-rose-300 text-xs flex items-center justify-between">
               <div className="flex items-center gap-2">
                 <AlertCircle className="h-4 w-4 shrink-0 text-rose-400" />
@@ -148,7 +148,7 @@ export function App() {
         )}
 
         {loading && step === 3 && !currentQuestion && (
-          <div className="max-w-4xl mx-auto py-24 px-4 text-center">
+          <div className="max-w-[1500px] w-full mx-auto py-24 px-4 text-center">
             <Loader2 className="h-10 w-10 text-indigo-500 animate-spin mx-auto mb-4" />
             <h3 className="text-lg font-bold text-white">Synthesizing Grounded Question...</h3>
             <p className="text-xs text-slate-400 mt-1">

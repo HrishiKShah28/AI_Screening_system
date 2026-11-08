@@ -15,7 +15,7 @@ export const Navbar: React.FC<NavbarProps> = ({ currentStep }) => {
 
   return (
     <header className="border-b border-slate-800 bg-slate-900/60 backdrop-blur-md sticky top-0 z-50">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+      <div className="max-w-[1500px] w-full mx-auto px-4 sm:px-6 lg:px-10 h-16 flex items-center justify-between">
         <div className="flex items-center space-x-3">
           <div className="h-10 w-10 rounded-xl bg-gradient-to-tr from-indigo-500 to-violet-500 flex items-center justify-center shadow-lg shadow-indigo-500/25">
             <Bot className="h-6 w-6 text-white" />
@@ -32,7 +32,7 @@ export const Navbar: React.FC<NavbarProps> = ({ currentStep }) => {
         </div>
 
         {/* Step Indicator */}
-        <nav className="hidden md:flex items-center space-x-2">
+        <nav className="hidden md:flex items-center space-x-3">
           {steps.map((s, idx) => {
             const Icon = s.icon;
             const isActive = currentStep === s.num;
@@ -40,7 +40,7 @@ export const Navbar: React.FC<NavbarProps> = ({ currentStep }) => {
             return (
               <React.Fragment key={s.num}>
                 <div
-                  className={`flex items-center space-x-2 px-3 py-1.5 rounded-lg text-xs font-medium transition-all ${
+                  className={`flex items-center space-x-2 px-3.5 py-1.5 rounded-lg text-xs font-medium transition-all ${
                     isActive
                       ? 'bg-indigo-600/20 text-indigo-300 border border-indigo-500/40 shadow-sm'
                       : isCompleted

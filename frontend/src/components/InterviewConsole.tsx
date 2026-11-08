@@ -12,6 +12,7 @@ import {
   Sparkles,
   ArrowRight,
   TrendingUp,
+  HelpCircle,
 } from 'lucide-react';
 
 interface InterviewConsoleProps {
@@ -31,9 +32,9 @@ export const InterviewConsole: React.FC<InterviewConsoleProps> = ({
   const [seconds, setSeconds] = useState(0);
   const [submitting, setSubmitting] = useState(false);
   const [evaluatedResult, setEvaluatedResult] = useState<AnswerResponse | null>(null);
-  const [showCitation, setShowCitation] = useState(false);
+  const [showCitation, setShowCitation] = useState(true);
 
-  // Timer
+  // Reset state on question change
   useEffect(() => {
     setSeconds(0);
     setAnswerText('');
@@ -79,219 +80,265 @@ export const InterviewConsole: React.FC<InterviewConsoleProps> = ({
   const source = question.source_traceability;
 
   return (
-    <div className="max-w-4xl mx-auto py-8 px-4">
+    <div className="max-w-[1500px] w-full mx-auto py-10 px-4 sm:px-6 lg:px-10">
       {/* Top Meta Bar */}
-      <div className="flex items-center justify-between mb-6 pb-4 border-b border-slate-800">
+      <div className="flex items-center justify-between mb-8 pb-4 border-b border-slate-800">
         <div className="flex items-center space-x-3">
-          <span className="text-xs font-semibold px-2.5 py-1 rounded-lg bg-indigo-500/10 text-indigo-400 border border-indigo-500/20">
+          <span className="text-xs font-bold px-3 py-1.5 rounded-lg bg-indigo-500/15 text-indigo-400 border border-indigo-500/30 uppercase tracking-wider">
             Question {question.question_index} of {question.total_questions}
           </span>
           <span
-            className={`text-xs font-semibold px-2.5 py-1 rounded-lg border uppercase tracking-wider ${getDifficultyBadge(
+            className={`text-xs font-bold px-3 py-1.5 rounded-lg border uppercase tracking-wider ${getDifficultyBadge(
               question.difficulty
             )}`}
           >
             {question.difficulty}
           </span>
-        </div>
-
-        <div className="flex items-center space-x-2 text-slate-400 text-xs font-mono bg-slate-900 px-3 py-1.5 rounded-lg border border-slate-800">
-          <Clock className="h-3.5 w-3.5 text-indigo-400" />
-          <span>{formatTime(seconds)}</span>
-        </div>
-      </div>
-
-      {/* Question Card */}
-      <div className="bg-slate-900/80 border border-slate-800 rounded-2xl p-6 sm:p-8 backdrop-blur-md mb-6 shadow-xl">
-        <div className="text-xs font-semibold text-indigo-400 uppercase tracking-wider mb-2">
-          {question.topic}
-        </div>
-        <h2 className="text-lg sm:text-xl font-bold text-white leading-relaxed">
-          {question.question_text}
-        </h2>
-
-        {/* Grounded Citation Preview Accordion */}
-        {source && source.book_title && (
-          <div className="mt-5 pt-4 border-t border-slate-800/80">
-            <button
-              onClick={() => setShowCitation(!showCitation)}
-              className="flex items-center gap-2 text-xs font-medium text-slate-400 hover:text-indigo-300 transition-colors cursor-pointer"
-            >
-              <BookOpen className="h-3.5 w-3.5 text-indigo-400" />
-              <span>
-                Grounded in: <strong className="text-slate-200">{source.book_title}</strong>{' '}
-                {source.page_number && `(p. ${source.page_number})`}
-              </span>
-              {showCitation ? (
-                <ChevronUp className="h-3.5 w-3.5 text-slate-500" />
-              ) : (
-                <ChevronDown className="h-3.5 w-3.5 text-slate-500" />
-              )}
-            </button>
-
-            {showCitation && (
-              <div className="mt-3 p-4 rounded-xl bg-slate-950/90 border border-slate-800 text-xs text-slate-300 leading-relaxed font-sans animate-fadeIn">
-                <div className="flex items-center justify-between text-[11px] text-slate-500 mb-2">
-                  <span>Author: {source.author || 'Authoritative Technical Literature'}</span>
-                  {source.similarity_score && (
-                    <span className="text-emerald-400 font-mono">
-                      Relevance: {(source.similarity_score * 100).toFixed(1)}%
-                    </span>
-                  )}
-                </div>
-                <p className="italic text-slate-300/90">"{source.excerpt}"</p>
-              </div>
-            )}
-          </div>
-        )}
-      </div>
-
-      {/* Answer Input or Evaluated Card */}
-      {!evaluatedResult ? (
-        <div className="bg-slate-900/50 border border-slate-800 rounded-2xl p-6">
-          <label className="block text-xs font-semibold text-slate-400 mb-2">
-            Your Technical Response:
-          </label>
-          <textarea
-            rows={7}
-            placeholder="Type your explanation detailing concepts, trade-offs, and implementation considerations..."
-            value={answerText}
-            onChange={(e) => setAnswerText(e.target.value)}
-            disabled={submitting}
-            className="w-full bg-slate-950 border border-slate-800 rounded-xl p-4 text-sm text-slate-200 focus:outline-none focus:border-indigo-500 leading-relaxed font-sans placeholder:text-slate-600"
-          />
-
-          <div className="mt-4 flex items-center justify-between">
-            <span className="text-xs text-slate-500">
-              {answerText.trim() ? `${answerText.trim().split(/\s+/).length} words` : '0 words'}
+          {question.target_competency && (
+            <span className="hidden md:inline-block text-xs text-slate-400 px-3 py-1.5 rounded-lg bg-slate-900 border border-slate-800">
+              Evaluating: <strong className="text-slate-200">{question.target_competency}</strong>
             </span>
-
-            <button
-              onClick={handleSubmit}
-              disabled={submitting || !answerText.trim()}
-              className="inline-flex items-center gap-2 px-6 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-500 disabled:opacity-50 disabled:cursor-not-allowed text-white text-xs font-semibold transition-all shadow-md shadow-indigo-600/20 cursor-pointer"
-            >
-              {submitting ? (
-                <>
-                  <Loader2 className="h-4 w-4 animate-spin" />
-                  <span>Evaluating Response with Ground Truth...</span>
-                </>
-              ) : (
-                <>
-                  <Send className="h-3.5 w-3.5" />
-                  <span>Submit Answer</span>
-                </>
-              )}
-            </button>
-          </div>
+          )}
         </div>
-      ) : (
-        /* Instant Rubric Evaluation Card */
-        <div className="bg-slate-900/90 border border-indigo-500/40 rounded-2xl p-6 sm:p-8 shadow-2xl animate-fadeIn">
-          <div className="flex items-center justify-between mb-6 pb-4 border-b border-slate-800">
-            <div className="flex items-center gap-2">
-              <Sparkles className="h-5 w-5 text-indigo-400" />
-              <h3 className="text-base font-bold text-white">Answer Evaluation</h3>
-            </div>
-            <div className="flex items-center gap-2">
-              <span className="text-xs text-slate-400">Score:</span>
-              <span className="text-xl font-extrabold text-indigo-400 font-mono">
-                {evaluatedResult.evaluation.score}
-                <span className="text-xs text-slate-500">/10</span>
-              </span>
-            </div>
-          </div>
 
-          {/* Metric Breakdown */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
-            <div className="bg-slate-950 p-4 rounded-xl border border-slate-800/80">
-              <div className="flex justify-between text-xs mb-1">
-                <span className="text-slate-400 font-medium">Conceptual Accuracy</span>
-                <span className="text-indigo-300 font-bold">{evaluatedResult.evaluation.conceptual_accuracy}/10</span>
-              </div>
-              <div className="w-full h-2 bg-slate-800 rounded-full overflow-hidden">
-                <div
-                  className="h-full bg-indigo-500 transition-all duration-500"
-                  style={{ width: `${evaluatedResult.evaluation.conceptual_accuracy * 10}%` }}
-                />
-              </div>
+        <div className="flex items-center space-x-2 text-slate-300 text-xs font-mono bg-slate-900 px-4 py-2 rounded-xl border border-slate-800 shadow-inner">
+          <Clock className="h-4 w-4 text-indigo-400" />
+          <span className="text-sm font-semibold">{formatTime(seconds)}</span>
+        </div>
+      </div>
+
+      {/* Main 2-Column Cockpit Layout */}
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+        {/* Left Column: Question & Grounded Context */}
+        <div className="lg:col-span-5 space-y-6">
+          <div className="bg-slate-900/80 border border-slate-800 rounded-3xl p-7 sm:p-8 backdrop-blur-md shadow-xl">
+            <div className="text-xs font-bold text-indigo-400 uppercase tracking-wider mb-3">
+              {question.topic}
             </div>
+            <h2 className="text-lg sm:text-xl font-bold text-white leading-relaxed">
+              {question.question_text}
+            </h2>
 
-            <div className="bg-slate-950 p-4 rounded-xl border border-slate-800/80">
-              <div className="flex justify-between text-xs mb-1">
-                <span className="text-slate-400 font-medium">Practical Depth</span>
-                <span className="text-violet-300 font-bold">{evaluatedResult.evaluation.practical_depth}/10</span>
+            {/* Grounded Citation Preview Box */}
+            {source && source.book_title && (
+              <div className="mt-6 pt-5 border-t border-slate-800">
+                <button
+                  onClick={() => setShowCitation(!showCitation)}
+                  className="w-full flex items-center justify-between text-xs font-semibold text-slate-300 hover:text-indigo-300 transition-colors cursor-pointer"
+                >
+                  <span className="flex items-center gap-2">
+                    <BookOpen className="h-4 w-4 text-indigo-400" />
+                    <span>Authoritative Textbook Citation</span>
+                  </span>
+                  {showCitation ? (
+                    <ChevronUp className="h-4 w-4 text-slate-500" />
+                  ) : (
+                    <ChevronDown className="h-4 w-4 text-slate-500" />
+                  )}
+                </button>
+
+                {showCitation && (
+                  <div className="mt-3 p-5 rounded-2xl bg-slate-950/90 border border-slate-800 text-xs text-slate-300 leading-relaxed font-sans shadow-inner">
+                    <div className="flex items-center justify-between text-[11px] text-slate-400 mb-2 pb-2 border-b border-slate-900">
+                      <span className="font-semibold text-slate-200">
+                        {source.book_title} {source.page_number && `(p. ${source.page_number})`}
+                      </span>
+                      {source.similarity_score && (
+                        <span className="text-emerald-400 font-mono text-[10px] bg-emerald-500/10 px-2 py-0.5 rounded border border-emerald-500/20">
+                          Match: {(source.similarity_score * 100).toFixed(1)}%
+                        </span>
+                      )}
+                    </div>
+                    {source.author && (
+                      <div className="text-[10px] text-slate-500 mb-2">Author: {source.author}</div>
+                    )}
+                    <p className="italic text-slate-300/90 leading-relaxed bg-slate-900/40 p-3 rounded-xl border border-slate-900">
+                      "{source.excerpt}"
+                    </p>
+                  </div>
+                )}
               </div>
-              <div className="w-full h-2 bg-slate-800 rounded-full overflow-hidden">
-                <div
-                  className="h-full bg-violet-500 transition-all duration-500"
-                  style={{ width: `${evaluatedResult.evaluation.practical_depth * 10}%` }}
-                />
-              </div>
-            </div>
-          </div>
-
-          {/* Qualitative Feedback */}
-          <div className="mb-6 p-4 rounded-xl bg-slate-950 border border-slate-800">
-            <div className="text-xs font-semibold text-slate-400 mb-1">Evaluator Feedback:</div>
-            <p className="text-xs text-slate-300 leading-relaxed">{evaluatedResult.evaluation.feedback}</p>
-          </div>
-
-          {/* Strengths & Improvements */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6 text-xs">
-            <div>
-              <div className="font-semibold text-emerald-400 mb-2 flex items-center gap-1.5">
-                <CheckCircle2 className="h-3.5 w-3.5" />
-                Strengths
-              </div>
-              <ul className="space-y-1.5 text-slate-300">
-                {evaluatedResult.evaluation.strengths.map((str, idx) => (
-                  <li key={idx} className="flex items-start gap-1.5">
-                    <span className="text-emerald-500 mt-0.5">•</span>
-                    <span>{str}</span>
-                  </li>
-                ))}
-              </ul>
-            </div>
-
-            <div>
-              <div className="font-semibold text-amber-400 mb-2 flex items-center gap-1.5">
-                <AlertTriangle className="h-3.5 w-3.5" />
-                Missing Nuances / Areas to Deepen
-              </div>
-              <ul className="space-y-1.5 text-slate-300">
-                {evaluatedResult.evaluation.areas_for_improvement.map((gap, idx) => (
-                  <li key={idx} className="flex items-start gap-1.5">
-                    <span className="text-amber-500 mt-0.5">•</span>
-                    <span>{gap}</span>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          </div>
-
-          {/* Action CTA */}
-          <div className="flex justify-end pt-4 border-t border-slate-800">
-            {evaluatedResult.next_action === 'FETCH_NEXT_QUESTION' ? (
-              <button
-                onClick={onProceedNext}
-                className="inline-flex items-center gap-2 px-6 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-semibold transition-all shadow-md shadow-indigo-600/20 cursor-pointer"
-              >
-                <span>Next Question</span>
-                <ArrowRight className="h-4 w-4" />
-              </button>
-            ) : (
-              <button
-                onClick={onCompleteInterview}
-                className="inline-flex items-center gap-2 px-6 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-semibold transition-all shadow-md shadow-emerald-600/20 cursor-pointer"
-              >
-                <span>Complete Interview & View Final Report</span>
-                <TrendingUp className="h-4 w-4" />
-              </button>
             )}
           </div>
+
+          {/* Answering Guidance Card */}
+          <div className="bg-slate-900/40 border border-slate-800/80 rounded-2xl p-5 text-xs text-slate-400 space-y-2">
+            <div className="flex items-center gap-2 font-semibold text-slate-300">
+              <HelpCircle className="h-4 w-4 text-indigo-400" />
+              <span>Assessment Guidance</span>
+            </div>
+            <p className="leading-relaxed">
+              Your answer will be objectively graded against the textbook reference. Address both the conceptual mechanism and practical implementation trade-offs for full marks.
+            </p>
+          </div>
         </div>
-      )}
+
+        {/* Right Column: Answer Input OR Instant Rubric Evaluation */}
+        <div className="lg:col-span-7">
+          {!evaluatedResult ? (
+            <div className="bg-slate-900/70 border border-slate-800 rounded-3xl p-7 sm:p-8 shadow-xl">
+              <div className="flex items-center justify-between mb-3">
+                <label className="block text-xs font-bold text-slate-300 uppercase tracking-wider">
+                  Your Technical Response
+                </label>
+                <span className="text-xs text-slate-500 font-mono">
+                  {answerText.trim() ? `${answerText.trim().split(/\s+/).length} words` : '0 words'}
+                </span>
+              </div>
+
+              <textarea
+                rows={11}
+                placeholder="Type your explanation detailing concepts, trade-offs, and implementation considerations..."
+                value={answerText}
+                onChange={(e) => setAnswerText(e.target.value)}
+                disabled={submitting}
+                className="w-full bg-slate-950 border border-slate-800 rounded-2xl p-5 text-sm text-slate-200 focus:outline-none focus:border-indigo-500 leading-relaxed font-sans placeholder:text-slate-600 shadow-inner"
+              />
+
+              <div className="mt-5 flex items-center justify-between pt-4 border-t border-slate-800">
+                <span className="text-xs text-slate-500">
+                  Take your time to structure your thoughts clearly.
+                </span>
+
+                <button
+                  onClick={handleSubmit}
+                  disabled={submitting || !answerText.trim()}
+                  className="inline-flex items-center gap-2 px-8 py-3 rounded-xl bg-indigo-600 hover:bg-indigo-500 disabled:opacity-50 disabled:cursor-not-allowed text-white text-sm font-semibold transition-all shadow-xl shadow-indigo-600/25 cursor-pointer"
+                >
+                  {submitting ? (
+                    <>
+                      <Loader2 className="h-4 w-4 animate-spin" />
+                      <span>Evaluating Response with Ground Truth...</span>
+                    </>
+                  ) : (
+                    <>
+                      <Send className="h-4 w-4" />
+                      <span>Submit Answer</span>
+                    </>
+                  )}
+                </button>
+              </div>
+            </div>
+          ) : (
+            /* Instant Rubric Evaluation Card */
+            <div className="bg-slate-900/95 border border-indigo-500/40 rounded-3xl p-7 sm:p-8 shadow-2xl animate-fadeIn">
+              <div className="flex items-center justify-between mb-6 pb-4 border-b border-slate-800">
+                <div className="flex items-center gap-2.5">
+                  <Sparkles className="h-6 w-6 text-indigo-400" />
+                  <div>
+                    <h3 className="text-lg font-bold text-white">Answer Evaluation</h3>
+                    <p className="text-xs text-slate-400">Grounded against textbook reference</p>
+                  </div>
+                </div>
+                <div className="flex items-center gap-3 bg-slate-950 px-4 py-2 rounded-2xl border border-slate-800">
+                  <span className="text-xs text-slate-400 font-semibold uppercase">Score:</span>
+                  <span className="text-2xl font-black text-indigo-400 font-mono">
+                    {evaluatedResult.evaluation.score}
+                    <span className="text-sm text-slate-500 font-normal">/10</span>
+                  </span>
+                </div>
+              </div>
+
+              {/* Metric Breakdown Progress Bars */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
+                <div className="bg-slate-950 p-4 rounded-2xl border border-slate-800">
+                  <div className="flex justify-between text-xs mb-2">
+                    <span className="text-slate-400 font-medium">Conceptual Accuracy</span>
+                    <span className="text-indigo-300 font-bold font-mono">
+                      {evaluatedResult.evaluation.conceptual_accuracy}/10
+                    </span>
+                  </div>
+                  <div className="w-full h-2.5 bg-slate-800 rounded-full overflow-hidden">
+                    <div
+                      className="h-full bg-indigo-500 transition-all duration-500"
+                      style={{ width: `${evaluatedResult.evaluation.conceptual_accuracy * 10}%` }}
+                    />
+                  </div>
+                </div>
+
+                <div className="bg-slate-950 p-4 rounded-2xl border border-slate-800">
+                  <div className="flex justify-between text-xs mb-2">
+                    <span className="text-slate-400 font-medium">Practical Depth</span>
+                    <span className="text-violet-300 font-bold font-mono">
+                      {evaluatedResult.evaluation.practical_depth}/10
+                    </span>
+                  </div>
+                  <div className="w-full h-2.5 bg-slate-800 rounded-full overflow-hidden">
+                    <div
+                      className="h-full bg-violet-500 transition-all duration-500"
+                      style={{ width: `${evaluatedResult.evaluation.practical_depth * 10}%` }}
+                    />
+                  </div>
+                </div>
+              </div>
+
+              {/* Qualitative Feedback */}
+              <div className="mb-6 p-5 rounded-2xl bg-slate-950 border border-slate-800">
+                <div className="text-xs font-bold text-slate-300 uppercase tracking-wider mb-2">
+                  Evaluator Feedback:
+                </div>
+                <p className="text-sm text-slate-200 leading-relaxed font-sans">
+                  {evaluatedResult.evaluation.feedback}
+                </p>
+              </div>
+
+              {/* Strengths & Improvements */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 mb-6 text-xs">
+                <div className="bg-slate-950/60 p-4 rounded-2xl border border-slate-800/80">
+                  <div className="font-bold text-emerald-400 mb-2.5 flex items-center gap-1.5 uppercase tracking-wider">
+                    <CheckCircle2 className="h-4 w-4" />
+                    Strengths
+                  </div>
+                  <ul className="space-y-2 text-slate-300">
+                    {evaluatedResult.evaluation.strengths.map((str, idx) => (
+                      <li key={idx} className="flex items-start gap-2">
+                        <span className="text-emerald-500 mt-0.5">•</span>
+                        <span className="leading-relaxed">{str}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+
+                <div className="bg-slate-950/60 p-4 rounded-2xl border border-slate-800/80">
+                  <div className="font-bold text-amber-400 mb-2.5 flex items-center gap-1.5 uppercase tracking-wider">
+                    <AlertTriangle className="h-4 w-4" />
+                    Missing Nuances / Gaps
+                  </div>
+                  <ul className="space-y-2 text-slate-300">
+                    {evaluatedResult.evaluation.areas_for_improvement.map((gap, idx) => (
+                      <li key={idx} className="flex items-start gap-2">
+                        <span className="text-amber-500 mt-0.5">•</span>
+                        <span className="leading-relaxed">{gap}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              </div>
+
+              {/* Action CTA */}
+              <div className="flex justify-end pt-5 border-t border-slate-800">
+                {evaluatedResult.next_action === 'FETCH_NEXT_QUESTION' ? (
+                  <button
+                    onClick={onProceedNext}
+                    className="inline-flex items-center gap-2 px-8 py-3.5 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white text-sm font-semibold transition-all shadow-xl shadow-indigo-600/25 cursor-pointer"
+                  >
+                    <span>Proceed to Next Question</span>
+                    <ArrowRight className="h-4 w-4" />
+                  </button>
+                ) : (
+                  <button
+                    onClick={onCompleteInterview}
+                    className="inline-flex items-center gap-2 px-8 py-3.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-sm font-semibold transition-all shadow-xl shadow-emerald-600/25 cursor-pointer"
+                  >
+                    <span>Complete Interview & View Final Report</span>
+                    <TrendingUp className="h-4 w-4" />
+                  </button>
+                )}
+              </div>
+            </div>
+          )}
+        </div>
+      </div>
     </div>
   );
 };

@@ -1,0 +1,26 @@
+Sarah Chen
+Email: sarah.chen@example.com | LinkedIn: linkedin.com/in/sarahchen-ds | Portfolio: sarahchen.dev
+Location: New York, NY
+
+PROFESSIONAL SUMMARY
+Applied Data Scientist with 3+ years of experience designing and deploying machine learning pipelines, predictive modeling, and statistical error analysis. Specialized in scikit-learn workflows, feature engineering, cross-validation architectures, and ensemble model selection.
+
+CORE COMPETENCIES & TECHNICAL SKILLS
+- Programming: Python, SQL, R, Bash
+- ML Libraries: Scikit-Learn, XGBoost, LightGBM, Pandas, NumPy, SciPy, Statsmodels
+- Tooling: Jupyter, Docker, MLflow, Airflow, Git, PostgreSQL
+- Data Science Skills: Feature Scaling, Data Leakage Prevention, Imbalanced Classification, Hyperparameter Optimization, ROC-AUC, Pipeline Architecture
+
+PROFESSIONAL EXPERIENCE
+Data Scientist | QuantEdge Analytics (2023 - Present)
+- Engineered end-to-end scikit-learn pipelines with custom transformers and cross-validation for customer churn prediction, boosting F1-score from 0.71 to 0.84.
+- Prevented data leakage across 15+ production pipelines by strictly isolating preprocessor fits to training splits.
+- Conducted randomized search hyperparameter tuning over ensemble gradient boosted trees, cutting model inference latency by 35%.
+
+Associate Data Analyst | BlueSky Metrics (2021 - 2023)
+- Implemented robust outlier detection and missing value imputation strategies across multi-million-row financial datasets.
+- Built interactive monitoring dashboards tracking precision-recall decay and data drift metrics.
+
+EDUCATION
+B.S. in Statistics & Data Science | Columbia University (2017 - 2021)
+

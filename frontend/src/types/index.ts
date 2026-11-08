@@ -109,3 +109,4 @@ export interface AssessmentReport {
   areas_for_improvement: string[];
   questions_summary: QuestionReportItem[];
 }
+
