@@ -146,4 +146,4 @@ python backend/tests/test_pipeline.py
 - [x] Persistent ChromaDB vector index with textbook citations.
 - [x] Functional React + TypeScript + Vite frontend with Tailwind CSS.
 - [x] Out-of-the-box local reproducibility with benchmark sample resumes.
-- [ ] End-to-end demonstration video recording (Mandatory for final submission).
+
